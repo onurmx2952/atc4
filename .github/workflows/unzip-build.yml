@@ -3,23 +3,27 @@ name: Unzip build.zip
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   unzip:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: unzip
+      - name: Unzip build.zip
         run: |
           sudo apt-get update
           sudo apt-get install -y unzip
           unzip -o build.zip
 
-      - name: commit
+      - name: Commit and push
         run: |
-          git config user.name "bot"
-          git config user.email "bot@github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add .
-          git commit -m "unzipped" || echo "no change"
+          git commit -m "Extract build.zip" || echo "No changes"
           git push
